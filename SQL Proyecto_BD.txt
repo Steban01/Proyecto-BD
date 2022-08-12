@@ -1,0 +1,141 @@
+CREATE TABLE desarrolladora
+(
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  suscriptores INT NOT NULL,
+  id_desarrolladora INT NOT NULL,
+  contrasenia_desarrolladora VARCHAR(20) NOT NULL,
+  PRIMARY KEY (nombre_desarrollador),
+  UNIQUE (id_desarrolladora)
+);
+
+CREATE TABLE desarrolladora_juegos_desarrollados
+(
+  juegos_desarrollados  VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  PRIMARY KEY (juegos_desarrollados, nombre_desarrollador),
+  FOREIGN KEY (nombre_desarrollador) REFERENCES desarrolladora(nombre_desarrollador)
+);
+
+CREATE TABLE cliente
+(
+  suscripcion_cliente VARCHAR(20) NOT NULL,
+  contrasenia_cliente VARCHAR(20) NOT NULL,
+  usuario_cliente VARCHAR(20) NOT NULL,
+  locacion_cliente VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  PRIMARY KEY (usuario_cliente),
+  FOREIGN KEY (nombre_desarrollador) REFERENCES desarrolladora(nombre_desarrollador)
+);
+
+CREATE TABLE videojuegos
+(
+  precio INT NOT NULL,
+  fecha_de_lanzamiento DATE NOT NULL,
+  nombre_videojuego VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  PRIMARY KEY (nombre_videojuego, nombre_desarrollador),
+  FOREIGN KEY (nombre_desarrollador) REFERENCES desarrolladora(nombre_desarrollador)
+);
+
+CREATE TABLE obtiene
+(
+  nombre_videojuego VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  usuario_cliente VARCHAR(20) NOT NULL,
+  PRIMARY KEY (nombre_videojuego, nombre_desarrollador, usuario_cliente),
+  FOREIGN KEY (nombre_videojuego, nombre_desarrollador) REFERENCES videojuegos(nombre_videojuego, nombre_desarrollador),
+  FOREIGN KEY (usuario_cliente) REFERENCES cliente(usuario_cliente)
+);
+
+CREATE TABLE cliente_juegos_biblioteca
+(
+  juegos_biblioteca VARCHAR(20) NOT NULL,
+  usuario_cliente VARCHAR(20) NOT NULL,
+  PRIMARY KEY (juegos_biblioteca, usuario_cliente),
+  FOREIGN KEY (usuario_cliente) REFERENCES cliente(usuario_cliente)
+);
+
+CREATE TABLE videojuegos_dlc
+(
+  dlc VARCHAR(20) NOT NULL,
+  nombre_videojuego VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  PRIMARY KEY (dlc, nombre_videojuego, nombre_desarrollador),
+  FOREIGN KEY (nombre_videojuego, nombre_desarrollador) REFERENCES videojuegos(nombre_videojuego, nombre_desarrollador)
+);
+
+CREATE TABLE videojuegos_puntuacion_promedio
+(
+  puntuacion_promedio DECIMAL NOT NULL,
+  nombre_videojuego VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  PRIMARY KEY (puntuacion_promedio, nombre_videojuego, nombre_desarrollador),
+  FOREIGN KEY (nombre_videojuego, nombre_desarrollador) REFERENCES videojuegos(nombre_videojuego, nombre_desarrollador)
+);
+
+CREATE TABLE videojuegos_generos
+(
+  generos VARCHAR(20) NOT NULL,
+  nombre_videojuego VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  PRIMARY KEY (generos, nombre_videojuego, nombre_desarrollador),
+  FOREIGN KEY (nombre_videojuego, nombre_desarrollador) REFERENCES videojuegos(nombre_videojuego, nombre_desarrollador)
+);
+
+CREATE TABLE factura
+(
+  num_factura INT NOT NULL,
+  cliente VARCHAR(20) NOT NULL,
+  id_videojuego INT NOT NULL,
+  fecha DATE NOT NULL,
+  precio DECIMAL NOT NULL,
+  usuario_cliente VARCHAR(20) NOT NULL,
+  nombre_videojuego VARCHAR(20) NOT NULL,
+  nombre_desarrollador VARCHAR(20) NOT NULL,
+  FOREIGN KEY (usuario_cliente) REFERENCES cliente(usuario_cliente),
+  FOREIGN KEY (nombre_videojuego, nombre_desarrollador) REFERENCES videojuegos(nombre_videojuego, nombre_desarrollador)
+);
+
+INSERT INTO desarrolladora(nombre_desarrollador, suscriptores, id_desarrolladora, contrasenia_desarrolladora) VALUES ('Riot Games', 54654, 6, 'rioters');
+INSERT INTO desarrolladora(nombre_desarrollador, suscriptores, id_desarrolladora, contrasenia_desarrolladora) VALUES ('Visceral Games', 4546, 7, 'visceralGames');
+INSERT INTO desarrolladora(nombre_desarrollador, suscriptores, id_desarrolladora, contrasenia_desarrolladora) VALUES ('Rockstar Games', 24005, 8, 'Rockstar1990');
+
+INSERT INTO videojuegos(precio, fecha_de_lanzamiento, nombre_videojuego, nombre_desarrollador) VALUES (56000, '2015/05/27', 'Dantes Inferno', 'Visceral Games');
+INSERT INTO videojuegos(precio, fecha_de_lanzamiento, nombre_videojuego, nombre_desarrollador) VALUES (75000, '2013/09/17', 'Grand Theft Auto V', 'Rockstar Games');
+INSERT INTO videojuegos(precio, fecha_de_lanzamiento, nombre_videojuego, nombre_desarrollador) VALUES (0, '2008/10/27', 'League of Legends', 'Riot Games');
+INSERT INTO videojuegos(precio, fecha_de_lanzamiento, nombre_videojuego, nombre_desarrollador) VALUES (0, '2020/06/02', 'Valorant', 'Riot Games');
+
+INSERT INTO desarrolladora_juegos_desarrollados(juegos_desarrollados, nombre_desarrollador) VALUES ('Dantes Inferno', 'Visceral Games');
+INSERT INTO desarrolladora_juegos_desarrollados(juegos_desarrollados, nombre_desarrollador) VALUES ('Grand Theft Auto V', 'Rockstar Games');
+INSERT INTO desarrolladora_juegos_desarrollados(juegos_desarrollados, nombre_desarrollador) VALUES ('League of Legends', 'Riot Games');
+INSERT INTO desarrolladora_juegos_desarrollados(juegos_desarrollados, nombre_desarrollador) VALUES ('Valorant', 'Riot Games');
+
+INSERT INTO cliente(suscripcion_cliente, contrasenia_cliente, usuario_cliente, locacion_cliente, nombre_desarrollador) VALUES ('Riot Games', 'takislomejor123', 'Nahim1092', 'Colombia', 'Riot Games');
+INSERT INTO cliente(suscripcion_cliente, contrasenia_cliente, usuario_cliente, locacion_cliente, nombre_desarrollador) VALUES ('Visceral Games', 'asr12313?', 'SergioSET', 'Colombia', 'Visceral Games');
+INSERT INTO cliente(suscripcion_cliente, contrasenia_cliente, usuario_cliente, locacion_cliente, nombre_desarrollador) VALUES ('Rockstar Games', 'nuevomexico_si', 'Clicker1980', 'USA', 'Rockstar Games');							
+
+
+INSERT INTO obtiene(nombre_videojuego, nombre_desarrollador, usuario_cliente) VALUES ('Valorant', 'Riot Games', 'Nahim1092');
+INSERT INTO obtiene(nombre_videojuego, nombre_desarrollador, usuario_cliente) VALUES ('League of Legends', 'Riot Games', 'Nahim1092');
+INSERT INTO obtiene(nombre_videojuego, nombre_desarrollador, usuario_cliente) VALUES ('Grand Theft Auto V', 'Rockstar Games', 'SergioSET');
+INSERT INTO obtiene(nombre_videojuego, nombre_desarrollador, usuario_cliente) VALUES ('League of Legends', 'Riot Games', 'SergioSET');
+INSERT INTO obtiene(nombre_videojuego, nombre_desarrollador, usuario_cliente) VALUES ('Valorant', 'Riot Games', 'SergioSET');
+INSERT INTO obtiene(nombre_videojuego, nombre_desarrollador, usuario_cliente) VALUES ('Grand Theft Auto V', 'Rockstar Games', 'Clicker1980');
+INSERT INTO obtiene(nombre_videojuego, nombre_desarrollador, usuario_cliente) VALUES ('Valorant', 'Riot Games', 'Clicker1980');
+
+
+INSERT INTO cliente_juegos_biblioteca(juegos_biblioteca, usuario_cliente) VALUES ('Valorant', 'Nahim1092');
+INSERT INTO cliente_juegos_biblioteca(juegos_biblioteca, usuario_cliente) VALUES ('League of Legends', 'Nahim1092');
+INSERT INTO cliente_juegos_biblioteca(juegos_biblioteca, usuario_cliente) VALUES ('Grand Theft Auto V', 'SergioSET');
+INSERT INTO cliente_juegos_biblioteca(juegos_biblioteca, usuario_cliente) VALUES ('League of Legends', 'SergioSET');
+INSERT INTO cliente_juegos_biblioteca(juegos_biblioteca, usuario_cliente) VALUES ('Valorant', 'SergioSET');
+INSERT INTO cliente_juegos_biblioteca(juegos_biblioteca, usuario_cliente) VALUES ('Grand Theft Auto V', 'Clicker1980');
+INSERT INTO cliente_juegos_biblioteca(juegos_biblioteca, usuario_cliente) VALUES ('Valorant', 'Clicker1980');
+
+
+INSERT INTO videojuegos_dlc (dlc, nombre_videojuego, nombre_desarrollador) VALUES ('No posee', 'Valorant', 'Riot Games');
+INSERT INTO videojuegos_dlc (dlc, nombre_videojuego, nombre_desarrollador) VALUES ('No posee', 'League of Legends', 'Riot Games');
+INSERT INTO videojuegos_dlc (dlc, nombre_videojuego, nombre_desarrollador) VALUES ('Inframundo', 'Dantes Inferno', 'Visceral Games');
+INSERT INTO videojuegos_dlc (dlc, nombre_videojuego, nombre_desarrollador) VALUES ('Cayo perico', 'Grand Theft Auto V', 'Rockstar Games');
+
+
